@@ -1214,8 +1214,18 @@
      * Communicates with FastAPI backend on localhost:8000 (/requests)
      */
     class AIHubApp {
+      getDefaultApiUrl() {
+        if (window.location.protocol.startsWith('http')) {
+          if (window.location.port === '5500') {
+            return `${window.location.protocol}//${window.location.hostname}:8000`;
+          }
+          return window.location.origin;
+        }
+        return 'http://localhost:8000';
+      }
+
       constructor() {
-        this.apiBaseUrl = localStorage.getItem('aihub_api_url') || 'http://localhost:8000';
+        this.apiBaseUrl = localStorage.getItem('aihub_api_url') || this.getDefaultApiUrl();
         this.activeMessages = [];
         this.historyData = [];
         this.isLoading = false;
